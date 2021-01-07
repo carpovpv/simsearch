@@ -2,7 +2,7 @@
 Multi-threaded similarity search in LevelDb databases. 
 
 ## Motivation
-In early-stage drug-development, it is important to find equal or similar to hits structures in big databases (open-access or in-house). For example, the REAL database contains more than 1 Billion compounds. To find out if a compound is in this database, the LevelDB index is used. The canonical SMILES is a key, and the ID of a compound is a value. Thus, the search is very fast and as a result, we also have a link to a web page of the found compound. The LevelDBServ provides a TCP-server that searches an input query in the index and returns ID if the query was found, or none, otherwise. 
+In early-stage drug-development, it is important to find equal or similar to hits structures in big databases (open-access or in-house). For example, the REAL database contains more than 1 Billion compounds. To find out if a compound is in this database, the LevelDB index is used. The canonical SMILES is a key, and the ID of a compound is a value. Thus, the search is very fast and as a result, we also have a link to a web page of the found compound. The LevelDBServ provides a TCP-server that searches an input query in the index and returns ID if the query is found, or none, otherwise. 
 
 ## Dependency
 * LevelDB (https://github.com/google/leveldb)
@@ -12,7 +12,7 @@ In early-stage drug-development, it is important to find equal or similar to hit
 The project uses CMake build system.
 
 ## Usage
-The project consists of three programs: LevelDbAdd - to create an index; LevelDbSearch - to search similar compounds; LevelDbServ - a TCP-server for on-line excat search.
+The project consists of three programs: LevelDbAdd - to create an index; LevelDbSearch - to search similar compounds; LevelDbServ - a TCP-server for on-line exact search.
 
 ### LevelDbAdd - creating an index
 
