@@ -29,7 +29,7 @@ LevelDbSearch has the following arguments:
 
 Found compounds are printed to stdout.
 
-### LevelDbServ 
+### LevelDbServ - a TCP server
 
 LevelDbServ has two arguments: the LevelDb file name and the port to start the TCP-server. 
 The server assumes receiving lines (separated with '\n', Linux style). Each line is converted to a canonical SMILES and searched in the index. If found, the ID is returned, otherwise none.
