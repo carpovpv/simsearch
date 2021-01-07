@@ -25,3 +25,8 @@ set (SOURCE
 add_executable ( ${PROJECT} ${HEADER} ${SOURCE} )
 target_link_libraries(LevelDbSearch ${RDKIT_LIBRARIES} ${RDKit_LIBS} Boost::iostreams -lleveldb pthread)
 
+add_executable ( LevelDbAdd ctpl.h add.cpp )
+target_link_libraries(LevelDbAdd ${RDKIT_LIBRARIES} ${RDKit_LIBS} Boost::iostreams -lleveldb)
+
+
+
