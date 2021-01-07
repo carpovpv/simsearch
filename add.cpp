@@ -16,6 +16,9 @@
 
 #include <leveldb/db.h>
 
+#include "clean.h"
+#include "constants.h"
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -42,13 +45,6 @@ int main(int argc, char** argv)
 
         return EXIT_FAILURE;
     }
-
-    std::vector<RDKit::ROMol*> frags;
-    frags.push_back(RDKit::SmartsToMol("[Cl,Br,I,Li,Na,K,Ca,Mg,O,N]"));
-    frags.push_back(RDKit::SmartsToMol("[N](=O)(O)O"));
-    frags.push_back(RDKit::SmartsToMol("[P](=O)(O)(O)O"));
-    frags.push_back(RDKit::SmartsToMol("[P](F)(F)(F)(F)(F)F"));
-    frags.push_back(RDKit::SmartsToMol("[S](=O)(=O)(O)O"));
 
     unsigned long cnt = 0;
 
@@ -82,9 +78,12 @@ int main(int argc, char** argv)
 
 	   try
 	   {
-              RDKit::ROMol * mol = RDKit::SmilesToMol(smile);
-	      canonical = RDKit::MolToSmiles(*mol);
-              delete mol;
+              RDKit::ROMol * mol = readAndClean(smile);
+	      if(mol)
+	      {
+	          canonical = RDKit::MolToSmiles(*mol);
+                  delete mol;
+	      }
            }
 	   catch(...)
 	   {

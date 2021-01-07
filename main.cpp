@@ -21,6 +21,8 @@
 
 #include <leveldb/db.h>
 #include "ctpl.h"
+#include "constants.h"
+#include "clean.h"
 
 int main( int argc , char **argv ) 
 {
@@ -42,15 +44,6 @@ int main( int argc , char **argv )
 	return EXIT_FAILURE;
     }
 
-    const int max_smi_length = 512;
-
-    //Fragment for removing salts.
-    std::vector<RDKit::ROMol*> frags;
-    frags.push_back(RDKit::SmartsToMol("[Cl,Br,I,Li,Na,K,Ca,Mg,O,N]"));
-    frags.push_back(RDKit::SmartsToMol("[N](=O)(O)O"));
-    frags.push_back(RDKit::SmartsToMol("[P](=O)(O)(O)O"));
-    frags.push_back(RDKit::SmartsToMol("[P](F)(F)(F)(F)(F)F"));
-    frags.push_back(RDKit::SmartsToMol("[S](=O)(=O)(O)O"));
 
     leveldb::DB* db;
     leveldb::Options options;
@@ -67,9 +60,9 @@ int main( int argc , char **argv )
 
     std::vector<ExplicitBitVect*> ds;
 
-    char buffer[max_smi_length];
+    char buffer[MAX_SMI_LENGTH];
     FILE * fp = fopen(sminame, "r");
-    while(fgets(buffer, max_smi_length, fp) != NULL)
+    while(fgets(buffer, MAX_SMI_LENGTH, fp) != NULL)
     {
 	const int len = strlen(buffer);
         if(buffer [len - 1] == '\n')	
@@ -78,8 +71,11 @@ int main( int argc , char **argv )
         try
 	{            
             RDKit::ROMol * mol = RDKit::SmilesToMol(buffer);
-            ds.push_back(RDKit::RDKFingerprintMol(*mol));
-            delete mol;
+	    if(mol)
+	    {
+                ds.push_back(RDKit::RDKFingerprintMol(*mol));
+                delete mol;
+	    }
         }
         catch(...){}
     }
@@ -104,13 +100,9 @@ int main( int argc , char **argv )
 	    
             try{
 
-               RDKit::ROMol *mol = RDKit::SmilesToMol( structure );           
-               for(int i=0; i< frags.size(); i++)
-               {
-                   RDKit::ROMol *m = RDKit::deleteSubstructs(*mol, *frags[i], true);
-                   delete mol;
-                   mol = m;
-               }
+               RDKit::ROMol *mol = readAndClean( structure );           
+	       if(mol == NULL)
+		  return;
 
                ExplicitBitVect *descr = RDKit::RDKFingerprintMol(*mol);
 
@@ -153,9 +145,6 @@ int main( int argc , char **argv )
 
     for(int i=0; i < ds.size(); i++)
        delete ds[i];
-
-    for(int i=0; i < frags.size(); i++)
-        delete frags[i];
 
     printf("Total molecules screened: %ld\n", N);
 

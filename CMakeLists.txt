@@ -17,16 +17,18 @@ link_directories ( ${RDBASE}/lib )
 include_directories(${RDKIT_INCLUDE_DIR})
 
 set (HEADER 
-	ctpl.h)
+	ctpl.h constants.h clean.h)
 
 set (SOURCE 
-        main.cpp)
+        main.cpp clean.cpp)
 
 add_executable ( ${PROJECT} ${HEADER} ${SOURCE} )
 target_link_libraries(LevelDbSearch ${RDKIT_LIBRARIES} ${RDKit_LIBS} Boost::iostreams -lleveldb pthread)
 
-add_executable ( LevelDbAdd ctpl.h add.cpp )
+add_executable ( LevelDbAdd constants.h clean.h add.cpp clean.cpp)
 target_link_libraries(LevelDbAdd ${RDKIT_LIBRARIES} ${RDKit_LIBS} Boost::iostreams -lleveldb)
 
+add_executable ( LevelDbServ constants.h clean.h serv.cpp clean.cpp)
+target_link_libraries(LevelDbServ ${RDKIT_LIBRARIES} ${RDKit_LIBS} Boost::iostreams -lleveldb)
 
 

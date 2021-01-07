@@ -1,0 +1,6 @@
+#ifndef SMISEARCH_CONSTANTS
+ 
+    #define SMISEARCH_CONSTANTS
+    #define MAX_SMI_LENGTH  512
+
+#endif //SMISEARCH_CONSTANTS
